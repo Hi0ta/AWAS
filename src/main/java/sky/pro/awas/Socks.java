@@ -14,7 +14,8 @@ public class Socks {
     private int cottonPart;
     private int quantity; //не может быть отрицательным
 
-    public Socks() {}
+    public Socks() {
+    }
 
     public Socks(Long socksId, String color, int cottonPart, @Positive int quantity) {
         this.socksId = socksId;

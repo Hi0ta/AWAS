@@ -52,7 +52,7 @@ public class SocksService {
      * Возвращает общее количество носков на складе согласно заданным критериям (цвета и состава)
      *
      * @param color      цвет
-     * @param function  оператор
+     * @param function   оператор
      * @param cottonPart содержание хлопка
      * @return общее количество носков на складе
      */

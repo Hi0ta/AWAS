@@ -9,8 +9,11 @@ import java.util.List;
 public interface SocksRepository extends JpaRepository<Socks, Long> {
 
     Socks findBySocksId(long socksId);
+
     List<Socks> findAllByColorAndCottonPartAfter(String color, int cottonPart);
+
     List<Socks> findAllByColorAndCottonPartBefore(String color, int cottonPart);
+
     List<Socks> findAllByColorAndCottonPartEquals(String color, int cottonPart);
 
 }
