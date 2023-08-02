@@ -8,10 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.List;
 
-//@Slf4j
-//@RequiredArgsConstructor
 @Service
 @Transactional
 public class SocksService {
@@ -27,6 +24,7 @@ public class SocksService {
     /**
      * Регистрирует приход носков на склад
      * <br> Использован метод репозитория {@link org.springframework.data.jpa.repository.JpaRepository#save(Object)}
+     *
      * @param socks носки
      * @return оприходованные носки
      */
@@ -37,11 +35,12 @@ public class SocksService {
 
     /**
      * Регистрирует отпуск носков со склада.
-     * @param socksId идентификатор носков
+     *
+     * @param socksId  идентификатор носков
      * @param quantity отпущенное количество (не может быть отрицательным)
      * @return остаток носков.
      */
-    public Socks editeSocks(@NotNull long socksId, @Positive int quantity){
+    public Socks editeSocks(@NotNull long socksId, @Positive int quantity) {
         logger.debug("launching the editeSocks method");
         Socks changeSocks = socksRepository.findBySocksId(socksId);
         int hangeQuantity = changeSocks.getQuantity() - quantity;
@@ -51,17 +50,21 @@ public class SocksService {
 
     /**
      * Возвращает общее количество носков на складе согласно заданным критериям (цвета и состава)
-     * @param color цвет
-     * @param operation оператор
+     *
+     * @param color      цвет
+     * @param function  оператор
      * @param cottonPart содержание хлопка
      * @return общее количество носков на складе
      */
-    public Integer findAllByColorAndCottonPart(String color, Operation operation,  int cottonPart){
+    public Integer findAllByColorAndCottonPart(String color, Function function, int cottonPart) {
         logger.debug("launching the findAllByColorAndCottonPart method");
-        return switch (operation) {
-            case MORE_THAN-> socksRepository.findAllByColorAndCottonPartAfter(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
-            case LESS_THAN -> socksRepository.findAllByColorAndCottonPartBefore(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
-            case EQUAL -> socksRepository.findAllByColorAndCottonPartEquals(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
+        return switch (function) {
+            case MORE_THAN ->
+                    socksRepository.findAllByColorAndCottonPartAfter(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
+            case LESS_THAN ->
+                    socksRepository.findAllByColorAndCottonPartBefore(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
+            case EQUAL ->
+                    socksRepository.findAllByColorAndCottonPartEquals(color, cottonPart).stream().mapToInt(Socks::getQuantity).sum();
         };
     }
 }

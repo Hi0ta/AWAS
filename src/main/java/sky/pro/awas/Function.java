@@ -1,14 +1,14 @@
 package sky.pro.awas;
 
-public enum Operation {
+public enum Function {
 
-    MORE_THAN("больше чем"),
-    LESS_THAN("меньше чем"),
-    EQUAL("равное");
+    MORE_THAN("более чем"),
+    LESS_THAN("менее чем"),
+    EQUAL("равный");
 
     private final String description;
 
-    Operation(String description) {
+    Function(String description) {
         this.description = description;
     }
 

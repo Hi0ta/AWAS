@@ -35,6 +35,7 @@ public class Socks {
         return cottonPart;
     }
 
+
     public int getQuantity() {
         return quantity;
     }
