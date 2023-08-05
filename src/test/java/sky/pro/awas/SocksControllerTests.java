@@ -17,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static sky.pro.awas.Function.EQUAL;
 
 @WebMvcTest
 public class SocksControllerTests {
@@ -29,12 +30,15 @@ public class SocksControllerTests {
     @SpyBean
     SocksService socksService;
 
+    private Function operation;
+
     @Test
     public void socksTest() throws Exception {
         final Long socksId = 1L;
         final String color = "red";
         final int cottonPart = 70;
         final int quantity = 20;
+        operation = EQUAL;
 
 
         JSONObject socksObject = new JSONObject();
@@ -49,7 +53,7 @@ public class SocksControllerTests {
         when(socksRepository.findBySocksId(any(Long.class))).thenReturn(socks);
         when(socksRepository.findAllByColorAndCottonPartAfter(any(String.class), any(Integer.class))).thenReturn(List.of(socks));
         when(socksRepository.findAllByColorAndCottonPartBefore(any(String.class), any(Integer.class))).thenReturn(List.of(socks));
-        when(socksRepository.findAllByColorAndCottonPartEquals(any(String.class), any(Integer.class))).thenReturn(List.of(socks));
+        when(socksRepository.findAllByColorAndCottonPartEquals(any(String.class), any(Integer.class))).thenReturn(socks);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/socks/income/")
@@ -64,7 +68,7 @@ public class SocksControllerTests {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/socks/outcome/" + socksId)
-                        .content(socks.toString())
+                        .content(socksObject.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -74,7 +78,7 @@ public class SocksControllerTests {
                 .andExpect(jsonPath("$.quantity").value(quantity));
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/socks/")
+                        .get("/socks?color=" + color + "&operation=" + operation + "&cottonPart=" + cottonPart + "'")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 

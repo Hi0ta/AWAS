@@ -5,9 +5,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sky.pro.awas.exeption.FormatNotComplianceException;
+import sky.pro.awas.exeption.ObjectAbsenceException;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/socks")
@@ -54,11 +59,15 @@ public class SocksController {
                             responseCode = "500",
                             description = "произошла ошибка, не зависящая от вызывающей стороны")})
     @PostMapping("/outcome/{socksId}")
-    public ResponseEntity<Socks> editeSocks(@Parameter(name = "socksId", description = "обязательно правильно заполнить <b>socksId</b> <br/>(если указать неверно носки не будут найдены в БД)")
-                                            @PathVariable long socksId,
-                                            @Parameter(name = "quantity", description = "количество отпущенных носков")
-                                            @RequestParam int quantity) {
-        return ResponseEntity.ok(socksService.editeSocks(socksId, quantity));
+    public ResponseEntity<?> editeSocks(@Parameter(name = "socksId", description = "обязательно правильно заполнить <b>socksId</b> <br/>(если указать неверно носки не будут найдены в БД)")
+                                        @PathVariable long socksId,
+                                        @Parameter(name = "quantity", description = "количество отпущенных носков")
+                                        @RequestParam int quantity) {
+        try {
+            return ResponseEntity.ok(socksService.editeSocks(socksId, quantity));
+        } catch (ObjectAbsenceException | FormatNotComplianceException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @Operation(
