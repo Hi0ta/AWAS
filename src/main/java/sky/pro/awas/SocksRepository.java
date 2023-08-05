@@ -14,6 +14,6 @@ public interface SocksRepository extends JpaRepository<Socks, Long> {
 
     List<Socks> findAllByColorAndCottonPartBefore(String color, int cottonPart);
 
-    List<Socks> findAllByColorAndCottonPartEquals(String color, int cottonPart);
+    Socks findAllByColorAndCottonPartEquals(String color, int cottonPart);
 
 }
